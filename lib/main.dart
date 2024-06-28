@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:contador/menu.dart';
-import 'package:contador/contador.dart';
 import 'package:logger/logger.dart';
+import 'list_screen.dart';
+import 'detail_screen.dart';
+import 'sensores_screen.dart';
+import 'gestos_screen.dart';
 
 final logger = Logger();
 
@@ -15,106 +17,140 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
+      title: 'Flutter Drawer Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const Menu(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class Menu extends StatefulWidget {
+  const Menu({super.key});
 
   @override
-  State<HomeScreen> createState() {
-    logger.i('Crear estado HomeScreen');
-    return _HomeScreenState();
+  State<Menu> createState() {
+    logger.i('Crear estado Menu');
+    return _MenuState();
   }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-  static const List<Widget> _pages = <Widget>[
-    Menu(),
-    Contador(title: 'Contador'),
-  ];
-
-  _HomeScreenState() {
-    logger.i('Constructor: _HomeScreenState');
+class _MenuState extends State<Menu> {
+  _MenuState() {
+    logger.i('Constructor: _MenuState');
     logger.i('mounted: $mounted');
   }
 
   @override
   void initState() {
     super.initState();
-    logger.i('initState HomeScreen');
+    logger.i('initState Menu');
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    logger.i('didChangeDependencies HomeScreen');
+    logger.i('didChangeDependencies Menu');
   }
 
   @override
-  void didUpdateWidget(HomeScreen oldWidget) {
+  void didUpdateWidget(Menu oldWidget) {
     super.didUpdateWidget(oldWidget);
-    logger.i('didUpdateWidget HomeScreen');
+    logger.i('didUpdateWidget Menu');
   }
 
   @override
   void deactivate() {
-    logger.i('deactivate HomeScreen');
+    logger.i('deactivate Menu');
     super.deactivate();
   }
 
   @override
   void dispose() {
-    logger.i('dispose HomeScreen');
+    logger.i('dispose Menu');
     super.dispose();
   }
 
   @override
   void reassemble() {
     super.reassemble();
-    logger.i('reassemble HomeScreen');
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      logger.i('setState: Cambiar página a $index');
-      _selectedIndex = index;
-    });
+    logger.i('reassemble Menu');
   }
 
   @override
   Widget build(BuildContext context) {
-    logger.i('build HomeScreen');
+    logger.i('build Menu');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('lab Segunda unidad'),
+        title: const Text('Menú Principal'),
       ),
-      body: Center(
-        child: _pages.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menú',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.countertops),
-            label: 'Contador',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
-        onTap: _onItemTapped,
+      drawer: buildDrawer(context),
+      body: const Center(
+        child: Text('Página de Menú'),
       ),
     );
   }
+}
+
+Drawer buildDrawer(BuildContext context) {
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        const DrawerHeader(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+          child: Text(
+            'Menú de Navegación',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+            ),
+          ),
+        ),
+        ListTile(
+          title: const Text('Lista'),
+          onTap: () {
+            logger.i('Navegar a Lista');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ListScreen()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Detalle'),
+          onTap: () {
+            logger.i('Navegar a Detalle');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const DetailScreen()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Sensores'),
+          onTap: () {
+            logger.i('Navegar a Sensores');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SensoresScreen()),
+            );
+          },
+        ),
+        ListTile(
+          title: const Text('Gestos'),
+          onTap: () {
+            logger.i('Navegar a Gestos');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const GestosScreen()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
 }
